@@ -1,0 +1,37 @@
+name: Update Manifest
+
+on:
+  schedule:
+    - cron: '0 * * * *'  #every hour
+  workflow_dispatch:  
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get latest release
+        id: get_release
+        run: |
+          RELEASE=$(curl -s https://api.github.com/repos/B0SEmc/ani-dl/releases/latest)
+          VERSION=$(echo $RELEASE | jq -r .tag_name)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update manifest
+        run: |
+          VERSION=${{ steps.get_release.outputs.VERSION }}
+          jq --arg v "$VERSION" '.version = $v | .url = "https://github.com/B0SEmc/ani-dl/releases/download/"+$v+"/ani-dl_"+$v+"_x86_64-pc-windows-gnu.zip"' manifest.json > temp.json && mv temp.json manifest.json
+
+      - name: Check for changes
+        id: git_status
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.git_status.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "Update manifest to version ${{ steps.get_release.outputs.VERSION }}"
+          git push
