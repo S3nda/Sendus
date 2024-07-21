@@ -21,7 +21,7 @@ jobs:
       - name: Update manifest
         run: |
           VERSION=${{ steps.get_release.outputs.VERSION }}
-          jq --arg v "$VERSION" '.version = $v | .url = "https://github.com/B0SEmc/ani-dl/releases/download/"+$v+"/ani-dl_"+$v+"_x86_64-pc-windows-gnu.zip"' manifest.json > temp.json && mv temp.json manifest.json
+          jq --arg v "$VERSION" '.version = $v | .url = "https://github.com/B0SEmc/ani-dl/releases/download/"+$v+"/ani-dl_"+$v+"_x86_64-pc-windows-gnu.zip"' ani-dl.json > temp.json && mv temp.json ani-dl.json
 
       - name: Check for changes
         id: git_status
