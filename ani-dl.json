@@ -1,7 +1,7 @@
 {
-  "version": "1.5.7",
+  "version": "1.5.8",
   "license": "GPL3",
-  "url": "https://github.com/B0SEmc/ani-dl/releases/download/1.5.7/ani-dl_1.5.7_x86_64-pc-windows-gnu.zip",
+  "url": "https://github.com/B0SEmc/ani-dl/releases/download/1.5.8/ani-dl_1.5.8_x86_64-pc-windows-gnu.zip",
   "depends": [
     "mpv",
     "yt-dlp"
